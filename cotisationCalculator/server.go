@@ -18,7 +18,7 @@ type GenerateFormData struct {
 	EmployeeSalary string `json:"employee_salary"`
 }
 
-func (p PayApi) generateCotisations(w http.ResponseWriter, r *http.Request) {
+func (p *PayApi) generateCotisations(w http.ResponseWriter, r *http.Request) {
 	slog.Info("Request GET /generate")
 	var form GenerateFormData
 
@@ -63,7 +63,7 @@ func (p PayApi) generateCotisations(w http.ResponseWriter, r *http.Request) {
 	slog.Info("Response GET /generate")
 }
 
-func (p PayApi) generateHandler(w http.ResponseWriter, r *http.Request) {
+func (p *PayApi) generateHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "POST":
 		p.generateCotisations(w, r)

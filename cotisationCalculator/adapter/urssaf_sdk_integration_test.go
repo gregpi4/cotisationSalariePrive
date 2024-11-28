@@ -23,12 +23,10 @@ func TestGetCotisationInformation(t *testing.T) {
 		Client:  CreateHTTPClient("marketware-root-cert.pem"),
 		BaseURL: "https://mon-entreprise.urssaf.fr/api/v1",
 	}
-	//adapter.getRule("APEC . employeur")
 	adapter.getRule("salarié . contrat . statut cadre")
 }
 
 func TestGetCotisation(t *testing.T) {
-	//want := []string{"bell", "cog", "inserter", "automate"}
 	adapter := UrssafAdapter{
 		Client:  CreateHTTPClient("marketware-root-cert.pem"),
 		BaseURL: "https://mon-entreprise.urssaf.fr/api/v1",
