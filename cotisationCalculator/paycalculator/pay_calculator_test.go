@@ -1,10 +1,11 @@
-package main
+package paycalculator
 
 import (
 	"testing"
 
 	mocks "cotisationCalculator/mocks"
 
+	"cotisationCalculator/data"
 	utils "cotisationCalculator/utils"
 
 	"github.com/golang/mock/gomock"
@@ -18,15 +19,15 @@ func TestGetCotisationsComposition(t *testing.T) {
 	mockFetcher := mocks.NewMockPayDataProvider(ctrl)
 	cotisation_value := float32(100.23)
 	for _, cotisation := range AllCotisations {
-		mockFetcher.EXPECT().GetCotisation(cotisation.ToUrssaf(), utils.InfoEntreprise{Name: "my_company", SalarieCadre: true, ContratInformation: "CDI"}, float32(3000)).Return(cotisation_value, nil).AnyTimes()
+		mockFetcher.EXPECT().GetCotisation(cotisation.ToUrssaf(), data.InfoEntreprise{Name: "my_company", SalarieCadre: true, ContratInformation: "CDI"}, float32(3000)).Return(cotisation_value, nil).AnyTimes()
 		cotisation_value++
 	}
 	var timeStub = utils.NewTestTime()
 	adapter := PayCotisations{
-		urssafAdapter:  mockFetcher,
-		localProvider:  mockFetcher,
-		timeProvider:   &timeStub,
-		infoEntreprise: utils.InfoEntreprise{Name: "my_company", SalarieCadre: true, ContratInformation: "CDI"},
+		UrssafAdapter:  mockFetcher,
+		LocalProvider:  mockFetcher,
+		TimeProvider:   &timeStub,
+		InfoEntreprise: data.InfoEntreprise{Name: "my_company", SalarieCadre: true, ContratInformation: "CDI"},
 	}
 	cotisations := adapter.CotisationPatronaleForAPI(3000)
 

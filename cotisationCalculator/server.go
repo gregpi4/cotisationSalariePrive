@@ -2,6 +2,8 @@ package main
 
 import (
 	"cotisationCalculator/adapter"
+	"cotisationCalculator/data"
+	"cotisationCalculator/paycalculator"
 	"cotisationCalculator/utils"
 	"encoding/json"
 	"fmt"
@@ -11,7 +13,7 @@ import (
 )
 
 type PayApi struct {
-	PayService PayCotisations
+	PayService paycalculator.PayCotisations
 }
 
 type GenerateFormData struct {
@@ -73,14 +75,14 @@ func (p *PayApi) generateHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	infoEntreprise := utils.InfoEntreprise{Name: "my_company", ContratInformation: "CDI", SalarieCadre: true}
+	infoEntreprise := data.InfoEntreprise{Name: "my_company", ContratInformation: "CDI", SalarieCadre: true}
 
 	urssafAdapter := adapter.UrssafAdapter{
 		Client:  adapter.CreateHTTPClient("adapter/marketware-root-cert.pem"),
 		BaseURL: "https://mon-entreprise.urssaf.fr/api/v1",
 	}
 	l := adapter.LocalPayCalculator{Name: "hello"}
-	payCalculator := PayCotisations{urssafAdapter, l, &utils.Time{}, infoEntreprise}
+	payCalculator := paycalculator.PayCotisations{UrssafAdapter: urssafAdapter, LocalProvider: l, TimeProvider: &utils.Time{}, InfoEntreprise: infoEntreprise}
 	fmt.Println(payCalculator)
 
 	t := PayApi{PayService: payCalculator}

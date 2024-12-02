@@ -22,4 +22,5 @@ func TestCalculateComposition(t *testing.T) {
 	jsonData, _ := json.Marshal(cotisations)
 	slog.Info(string(jsonData))
 	slog.Info("finish")
+	panic("not implemented yet")
 }

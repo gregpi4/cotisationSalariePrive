@@ -1,15 +1,16 @@
-package main
+package paycalculator
 
 import (
 	"log/slog"
 	"strconv"
 	"time"
 
+	"cotisationCalculator/data"
 	utils "cotisationCalculator/utils"
 )
 
 type PayDataProvider interface {
-	GetCotisation(cotisation string, infoEntreprise utils.InfoEntreprise, salaire float32) (float32, error)
+	GetCotisation(cotisation string, infoEntreprise data.InfoEntreprise, salaire float32) (float32, error)
 }
 
 type Cotisation interface {
@@ -87,10 +88,10 @@ func (c CotisationSalariale) ToString() string {
 }
 
 type PayCotisations struct {
-	urssafAdapter  PayDataProvider
-	localProvider  PayDataProvider
-	timeProvider   utils.TimeOperations
-	infoEntreprise utils.InfoEntreprise
+	UrssafAdapter  PayDataProvider
+	LocalProvider  PayDataProvider
+	TimeProvider   utils.TimeOperations
+	InfoEntreprise data.InfoEntreprise
 }
 
 type job struct {
@@ -121,10 +122,10 @@ type PayCotisationsInterface interface {
 func (p *PayCotisations) cotisationValue(delay time.Duration, cotisation Cotisation, salaire float32, resultChannel chan job, errChan chan<- jobError) {
 	slog.Info("calculate " + cotisation.ToString())
 
-	p.timeProvider.Sleep(delay)
-	value, err := p.urssafAdapter.GetCotisation(cotisation.ToUrssaf(), p.infoEntreprise, salaire)
+	p.TimeProvider.Sleep(delay)
+	value, err := p.UrssafAdapter.GetCotisation(cotisation.ToUrssaf(), p.InfoEntreprise, salaire)
 	if err != nil {
-		value, err = p.localProvider.GetCotisation(cotisation.ToUrssaf(), p.infoEntreprise, salaire)
+		value, err = p.LocalProvider.GetCotisation(cotisation.ToUrssaf(), p.InfoEntreprise, salaire)
 		if err != nil {
 			slog.Info("envoie dans canal pour" + cotisation.ToString())
 			errChan <- jobError{cotisation: cotisation.ToString(), err: err}

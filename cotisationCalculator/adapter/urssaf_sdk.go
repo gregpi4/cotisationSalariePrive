@@ -2,7 +2,7 @@ package adapter
 
 import (
 	"bytes"
-	utils "cotisationCalculator/utils"
+	"cotisationCalculator/data"
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/json"
@@ -116,7 +116,7 @@ func parseStatutCadre(statutCadre bool) string {
 	return "non"
 }
 
-func (payDataProvider UrssafAdapter) GetCotisation(cotisation string, infoEntreprise utils.InfoEntreprise, salaire float32) (ret float32, ret_err error) {
+func (payDataProvider UrssafAdapter) GetCotisation(cotisation string, infoEntreprise data.InfoEntreprise, salaire float32) (ret float32, ret_err error) {
 	// example post body
 	// {
 	// 	"situation": {

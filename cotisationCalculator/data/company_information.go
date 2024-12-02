@@ -1,4 +1,4 @@
-package utils
+package data
 
 type InfoEntreprise struct {
 	Name               string
